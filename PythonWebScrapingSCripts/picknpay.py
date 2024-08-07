@@ -13,55 +13,53 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 def extract_product_info(driver):
     try:
-        # Wait for the product container elements to be present
+        # Wait for the main product container to be present
         WebDriverWait(driver, 20).until(
-            EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div.x-product-container--grid.ml-0.mr-0.ng-star-inserted"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, "div.cx-product-container--grid.ml-0.mr-0.ng-star-inserted"))
         )
+        
+        # Fetch all product items
+        product_items = driver.find_elements(By.CSS_SELECTOR, "ui-product-grid-item.ng-star-inserted")
 
-        # Fetch all product containers
-        product_containers = driver.find_elements(By.CSS_SELECTOR, "div.x-product-container--grid.ml-0.mr-0.ng-star-inserted")
-
-        if not product_containers:
-            print("No product containers found!")
+        if not product_items:
+            print("No product items found!")
             return
 
-        print(f"Found {len(product_containers)} product containers.")
-
-        for container in product_containers:
+        for item in product_items:
             # Initialize variables
             image_src = "Not found"
             product_name = "Not found"
             product_price = "Not found"
 
-            # Check if product image exists before extracting attributes
+            # Extract product image
             try:
-                product_image = container.find_element(By.CSS_SELECTOR, "img")
+                product_image = item.find_element(By.CSS_SELECTOR, "img")
                 image_src = product_image.get_attribute("src")
             except Exception as e:
-                print(f"Error finding product image: {e}")
+                pass  # Ignore errors finding product image
 
-            # Check if product name exists before extracting attributes
+            # Extract product name
             try:
-                product_name_element = container.find_element(By.CSS_SELECTOR, "span.product-name")  # Adjust selector as needed
+                product_name_element = item.find_element(By.CSS_SELECTOR, "div.product-grid-item__info-container > a  > span")
                 product_name = product_name_element.text
             except Exception as e:
-                print(f"Error finding product name: {e}")
+                pass  # Ignore errors finding product name
 
-            # Check if product price exists before extracting attributes
+            # Extract product price
             try:
-                product_price_element = container.find_element(By.CSS_SELECTOR, "span.product-price")  # Adjust selector as needed
+                product_price_element = item.find_element(By.CSS_SELECTOR, ".product-grid-item__price-container.ng-star-inserted.price")
                 product_price = product_price_element.text
             except Exception as e:
-                print(f"Error finding product price: {e}")
+                pass  # Ignore errors finding product price
 
-            # Print extracted information
-            print("Product Image:", image_src)
-            print("Product Name:", product_name)
-            print("Product Price:", product_price)
-            print("-" * 30)
+            # Print extracted information if available
+            if image_src != "Not found" or product_name != "Not found" or product_price != "Not found":
+                print(f"Product Image: {image_src}")
+                print(f"Product Name: {product_name}")
+                print(f"Product Price: {product_price}")
+                print("-" * 30)
 
     except Exception as e:
-        # Print the error message and traceback
         print(f"Error extracting product info: {e}")
         traceback.print_exc()
         # Print the current page source for debugging
@@ -70,7 +68,7 @@ def extract_product_info(driver):
 # Set up Chrome options
 chrome_options = Options()
 # Uncomment to see browser actions
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
 
