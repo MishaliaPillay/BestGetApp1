@@ -1,4 +1,4 @@
-import requests
+import requests#type:ignore
 from bs4 import BeautifulSoup
 
 def find_product_list_items(url, outer_div_classes):
