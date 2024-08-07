@@ -47,7 +47,7 @@ def extract_product_info(driver):
 
             # Extract product price
             try:
-                product_price_element = item.find_element(By.CSS_SELECTOR, ".product-grid-item__price-container.ng-star-inserted.price")
+                product_price_element = item.find_element(By.CSS_SELECTOR, "div.cms-price-display > div > div.price ")
                 product_price = product_price_element.text
             except Exception as e:
                 pass  # Ignore errors finding product price
