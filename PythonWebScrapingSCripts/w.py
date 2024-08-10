@@ -35,3 +35,6 @@ if product_items:
         print(item.prettify(encoding='utf-8'))  # Prettify for better readability
 else:
     print("No product list items found.")
+
+
+    

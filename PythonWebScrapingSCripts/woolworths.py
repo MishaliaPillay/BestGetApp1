@@ -1,12 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions 
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager#type:ignore
+from webdriver_manager.chrome import ChromeDriverManager
 import sys
-import traceback
 
 # Ensure UTF-8 encoding for standard output
 sys.stdout.reconfigure(encoding='utf-8')
@@ -15,12 +14,12 @@ def extract_product_info(driver):
     try:
         # Wait for the main product container to be present
         WebDriverWait(driver, 30).until(
-            expected_conditions.presence_of_element_located((By.CSS_SELECTOR, "div.cx-product-container--grid.ml-0.mr-0.ng-star-inserted"))
+            EC.presence_of_element_located((By.CSS_SELECTOR, "div.grid.grid--flex.grid--space-y.layout--1x3"))
         )
-        
-        # Fetch all product items
-        product_items = driver.find_elements(By.CSS_SELECTOR, "ui-product-grid-item.ng-star-inserted")
 
+        # Fetch all product items
+        product_items = driver.find_elements(By.CSS_SELECTOR, "div.product-list__item")  # Selector for product items
+        print(product_items)
         if not product_items:
             print("No product items found!")
             return
@@ -33,37 +32,36 @@ def extract_product_info(driver):
 
             # Extract product image
             try:
-                product_image = item.find_element(By.CSS_SELECTOR, "img")
-                image_src = product_image.get_attribute("src")
+                img_tag = item.find_element(By.CSS_SELECTOR, "img.product-card__img")
+                image_src = img_tag.get_attribute("src")
             except Exception as e:
                 print(f"Error finding product image: {e}")
 
             # Extract product name
             try:
-                product_name_element = item.find_element(By.CSS_SELECTOR, "div.product-grid-item__info-container > a > span")
+                product_name_element = item.find_element(By.CSS_SELECTOR, "a.range--title")
                 product_name = product_name_element.text
             except Exception as e:
                 print(f"Error finding product name: {e}")
 
             # Extract product price
             try:
-                product_price_element = item.find_element(By.CSS_SELECTOR, "div.cms-price-display > div > div.price ")
+                product_price_element = item.find_element(By.CSS_SELECTOR, "div.product-card__actions > strong.font-graphic > strong.price")
                 product_price = product_price_element.text
             except Exception as e:
                 print(f"Error finding product price: {e}")
 
             # Print extracted information if available
-            if image_src != "Not found" or product_name != "Not found" or product_price != "Not found":
-                print(f"Product Image: {image_src}")
+            if image_src != "Not found" and product_name != "Not found" and product_price != "Not found":
                 print(f"Product Name: {product_name}")
+                print(f"Product Image: {image_src}")
                 print(f"Product Price: {product_price}")
                 print("-" * 30)
 
     except Exception as e:
         print(f"Error extracting product info: {e}")
-        traceback.print_exc()
-        # Print the current page source for debugging
-        print(driver.page_source)
+        # Print the entire page source for debugging
+       
 
 # Set up Chrome options
 chrome_options = Options()
@@ -77,7 +75,7 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), opti
 
 try:
     # Navigate to the URL
-    url = 'https://www.pnp.co.za/c/pnpbase?currentPage=1'
+    url = 'https://www.woolworths.co.za/cat/Food?No=0&Nrpp=24'  # Replace with the actual URL
     driver.get(url)
 
     # Wait for the page to be fully loaded
