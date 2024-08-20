@@ -75,7 +75,7 @@ def extract_product_info(driver):
                 products.append({
                     "image": image_src,
                     "name": product_name,
-                    "price": product_price
+                    "price": product_price, "source": "Pick n pay"
                 })
 #catches all expection that might occur
     except Exception as e:
@@ -106,8 +106,8 @@ def main():
     all_products = []
 
     try:
-        # Loop through pages from 0 to 70
-        for page_number in range(0, 71):
+        # Loop through pages from 0 to 71
+        for page_number in range(0, 3):
             # Format the URL with the current page number
             url = f'https://www.pnp.co.za/c/pnpbase?query=:relevance:allCategories:pnpbase:category:food-cupboard-423144840&currentPage={page_number}'
             

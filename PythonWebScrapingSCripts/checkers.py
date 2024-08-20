@@ -77,7 +77,7 @@ def extract_product_info(driver):
                 products.append({
                     "image": image_src,
                     "name": product_name,
-                    "price": product_price
+                    "price": product_price,"source": "Checkers"
                 })
 #catches all expection that might occure 
     except Exception as e:
@@ -111,8 +111,8 @@ def main():
     all_products = []
 
     try:
-        # Loop through pages from 0 to 354
-        for page_number in range(0, 355):
+        # Loop through pages from 0 to 355
+        for page_number in range(0, 3):
             # Formats the URL with the current page number
             url = f'https://www.checkers.co.za/c-2413/All-Departments/Food?q=%3Arelevance%3AbrowseAllStoresFacetOff%3AbrowseAllStoresFacetOff&page={page_number}'
             

@@ -103,7 +103,7 @@ def extract_product_info(driver):
                 products.append({
                     "image": image_src,
                     "name": product_name,
-                    "price": product_price
+                    "price": product_price,"source": "Woolworths"
                 })
 
     except Exception as e:
@@ -132,8 +132,8 @@ def main():
     all_products = []
 
     try:
-        # Iterate over pages from 0 to 325 (increments of 24)
-        for page_number in range(0, 326):
+        # Iterate over pages from 0 to 326 (increments of 24)
+        for page_number in range(0, 3):
             offset = page_number * 24
             # Format the URL with the current offset
             url = f'https://www.woolworths.co.za/cat/Food/_/N-1z13sk5?No={offset}&Nrpp=24'
