@@ -160,12 +160,7 @@ def main():
         driver.quit()
 
     # For future use, store in a database
-    # For now, print to console
-    for product in all_products:
-        print(f"Product Image: {product['image']}")
-        print(f"Product Name: {product['name']}")
-        print(f"Product Price: {product['price']}")
-        print("-" * 30)
+    return all_products if all_products else []
 
 if __name__ == "__main__":
     main()

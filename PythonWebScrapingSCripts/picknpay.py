@@ -27,7 +27,7 @@ def extract_product_info(driver):
         Returns:
             list of dict: A list of dictionaries where each dictionary contains information about a product, including image URL, name, and price.
         """
-     #This is an empty list that will store the products that are scrapped from the checkers website
+     #This is an empty list that will store the products that are scrapped from the pnp website
     products = []
 
     try:
@@ -133,12 +133,11 @@ def main():
         driver.quit()
 
     # For future use, will store in a database
+
+
+    
     # For now, print to console
-    for product in all_products:
-        print(f"Product Image: {product['image']}")
-        print(f"Product Name: {product['name']}")
-        print(f"Product Price: {product['price']}")
-        print("-" * 30)
+    return all_products if all_products else []
 
 if __name__ == "__main__":
     main()

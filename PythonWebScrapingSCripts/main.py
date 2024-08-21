@@ -20,6 +20,17 @@ def main():
     # Step 3: Run the web scrapers and store data in the database
     all_products = []
 
+  
+
+    try:
+        logging.info("Running Woolworths scraper...")
+        woolworths_products = woolworths()  # Run Woolworths scraper
+        for product in woolworths_products:
+            insert_product(conn, product)
+            all_products.append(product)
+        logging.info(f"Woolworths scraper completed: {len(woolworths_products)} products found.")
+    except Exception as e:
+        logging.error(f"Woolworths scraper failed: {e}")
     try:
         logging.info("Running Checkers scraper...")
         checkers_products = checkers()  # Run Checkers scraper
@@ -39,27 +50,10 @@ def main():
         logging.info(f"PnP scraper completed: {len(pnp_products)} products found.")
     except Exception as e:
         logging.error(f"PnP scraper failed: {e}")
-
-    try:
-        logging.info("Running Woolworths scraper...")
-        woolworths_products = woolworths()  # Run Woolworths scraper
-        for product in woolworths_products:
-            insert_product(conn, product)
-            all_products.append(product)
-        logging.info(f"Woolworths scraper completed: {len(woolworths_products)} products found.")
-    except Exception as e:
-        logging.error(f"Woolworths scraper failed: {e}")
-
     # Step 4: Close the database connection
     close_connection(conn)
 
-    # Step 5: Print all the products after scraping all sites
-    for product in all_products:
-        print(f"Product Source: {product['source']}")
-        print(f"Product Image: {product['image']}")
-        print(f"Product Name: {product['name']}")
-        print(f"Product Price: {product['price']}")
-        print("-" * 30)
+    
 
 if __name__ == "__main__":
     main()

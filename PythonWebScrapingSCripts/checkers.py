@@ -144,11 +144,7 @@ def main():
 
     # For future use,will store in a database
     # For now, print to console
-    for product in all_products:
-        logging.info(f"Product Image: {product['image']}")
-        logging.info(f"Product Name: {product['name']}")
-        logging.info(f"Product Price: {product['price']}")
-        logging.info("-" * 30)
+    return all_products if all_products else []
 
 if __name__ == "__main__":
     main()
