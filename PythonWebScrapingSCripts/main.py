@@ -1,4 +1,4 @@
-from database import create_connection, create_table, insert_product, close_connection
+from database import create_connection, create_table, update_or_insert_product, close_connection
 from checkers import main as checkers
 from picknpay import main as pnp
 from woolworths import main as woolworths
@@ -18,25 +18,20 @@ def main():
     create_table(conn)
 
     # Step 3: Run the web scrapers and store data in the database
-    all_products = []
-
-  
-
     try:
         logging.info("Running Woolworths scraper...")
         woolworths_products = woolworths()  # Run Woolworths scraper
         for product in woolworths_products:
-            insert_product(conn, product)
-            all_products.append(product)
+            update_or_insert_product(conn, product)
         logging.info(f"Woolworths scraper completed: {len(woolworths_products)} products found.")
     except Exception as e:
         logging.error(f"Woolworths scraper failed: {e}")
+    
     try:
         logging.info("Running Checkers scraper...")
         checkers_products = checkers()  # Run Checkers scraper
         for product in checkers_products:
-            insert_product(conn, product)
-            all_products.append(product)
+            update_or_insert_product(conn, product)
         logging.info(f"Checkers scraper completed: {len(checkers_products)} products found.")
     except Exception as e:
         logging.error(f"Checkers scraper failed: {e}")
@@ -45,15 +40,13 @@ def main():
         logging.info("Running PnP scraper...")
         pnp_products = pnp()  # Run PnP scraper
         for product in pnp_products:
-            insert_product(conn, product)
-            all_products.append(product)
+            update_or_insert_product(conn, product)
         logging.info(f"PnP scraper completed: {len(pnp_products)} products found.")
     except Exception as e:
         logging.error(f"PnP scraper failed: {e}")
+    
     # Step 4: Close the database connection
     close_connection(conn)
-
-    
 
 if __name__ == "__main__":
     main()

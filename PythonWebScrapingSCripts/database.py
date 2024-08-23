@@ -27,6 +27,27 @@ def create_table(conn):
     except sqlite3.Error as e:
         print(f"Error: {e}")
 
+def get_product_by_name_and_source(conn, name, source):
+    """Get a product by name and source."""
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT id, price FROM products WHERE name = ? AND source = ?
+    ''', (name, source))
+    return cursor.fetchone()
+
+def update_product(conn, product_id, updated_product):
+    """Update a product in the products table."""
+    try:
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE products
+            SET image = ?, name = ?, price = ?, source = ?
+            WHERE id = ?
+        ''', (updated_product['image'], updated_product['name'], updated_product['price'], updated_product['source'], product_id))
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"Error: {e}")
+
 def insert_product(conn, product):
     """Insert a product into the products table."""
     try:
@@ -38,6 +59,16 @@ def insert_product(conn, product):
         conn.commit()
     except sqlite3.Error as e:
         print(f"Error: {e}")
+
+def update_or_insert_product(conn, product):
+    """Update the product if it exists and the price has changed, or insert it if it doesn't exist."""
+    existing_product = get_product_by_name_and_source(conn, product['name'], product['source'])
+    if existing_product:
+        product_id, existing_price = existing_product
+        if existing_price != product['price']:
+            update_product(conn, product_id, product)
+    else:
+        insert_product(conn, product)
 
 def close_connection(conn):
     """Close the database connection."""
