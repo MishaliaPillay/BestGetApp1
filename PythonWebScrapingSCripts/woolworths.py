@@ -133,7 +133,7 @@ def main():
 
     try:
         # Iterate over pages from 0 to 326 (increments of 24)
-        for page_number in range(0, 3):
+        for page_number in range(0, 4):
             offset = page_number * 24
             # Format the URL with the current offset
             url = f'https://www.woolworths.co.za/cat/Food/_/N-1z13sk5?No={offset}&Nrpp=24'
