@@ -119,9 +119,10 @@ def main():
             # makes sure page is fully loaded before trying to extract data
             WebDriverWait(driver, 30).until(
                 lambda driver: driver.execute_script("return document.readyState") == "complete"
+
             )
 
-             # calls a function to extract from the current pag
+             # calls a function to extract from the current page
             products = extract_product_info(driver)
             #allows script to gather data from all pages into one list
             all_products.extend(products)

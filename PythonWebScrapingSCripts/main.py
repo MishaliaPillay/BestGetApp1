@@ -18,6 +18,7 @@ def main():
     create_table(conn)
 
     # Step 3: Run the web scrapers and store data in the database
+
     try:
         logging.info("Running Woolworths scraper...")
         woolworths_products = woolworths()  # Run Woolworths scraper

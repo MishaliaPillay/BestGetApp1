@@ -45,6 +45,7 @@ def update_product(conn, product_id, updated_product):
             WHERE id = ?
         ''', (updated_product['image'], updated_product['name'], updated_product['price'], updated_product['source'], product_id))
         conn.commit()
+        
     except sqlite3.Error as e:
         print(f"Error: {e}")
 
