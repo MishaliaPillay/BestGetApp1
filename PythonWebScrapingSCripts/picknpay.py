@@ -65,8 +65,18 @@ def extract_product_info(driver):
 
             # Tries to find price for current product
             try:
+    # Try to find the regular price element first
                 product_price_element = item.find_element(By.CSS_SELECTOR, "div.cms-price-display > div > div.price")
-                product_price = product_price_element.text
+                
+                # Check if the found price element has the promo class
+                if "price_promo" in product_price_element.get_attribute("class"):
+                    # If a promo price exists, get the price from the <span> inside .price_promo
+                    promo_price_element = item.find_element(By.CSS_SELECTOR, "div.cms-price-display > div > div.price.price_promo > span")
+                    product_price = promo_price_element.text
+                else:
+                    # If no promo price, get the regular price
+                    product_price = product_price_element.text
+
             except Exception as e:
                 print(f"Error finding product price: {e}")
 
@@ -76,7 +86,7 @@ def extract_product_info(driver):
                     "image": image_src,
                     "name": product_name,
                     "price": product_price, "source": "Pick n pay"
-                })
+                })  
 #catches all expection that might occur
     except Exception as e:
         print(f"Error extracting product info: {e}")
@@ -107,7 +117,7 @@ def main():
 
     try:
         # Loop through pages from 0 to 71
-        for page_number in range(0, 3):
+        for page_number in range(0, 71):
             # Format the URL with the current page number
             url = f'https://www.pnp.co.za/c/pnpbase?query=:relevance:allCategories:pnpbase:category:food-cupboard-423144840&currentPage={page_number}'
             
@@ -119,10 +129,9 @@ def main():
             # makes sure page is fully loaded before trying to extract data
             WebDriverWait(driver, 30).until(
                 lambda driver: driver.execute_script("return document.readyState") == "complete"
-
             )
 
-             # calls a function to extract from the current page
+             # calls a function to extract from the current pag
             products = extract_product_info(driver)
             #allows script to gather data from all pages into one list
             all_products.extend(products)
@@ -134,8 +143,7 @@ def main():
         driver.quit()
 
     # For future use, will store in a database
-
-
+   # print(all_products)
     
     # For now, print to console
     return all_products if all_products else []
