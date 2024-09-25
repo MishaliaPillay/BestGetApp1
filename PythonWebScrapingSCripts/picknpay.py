@@ -117,7 +117,8 @@ def main():
 
     try:
         # Loop through pages from 0 to 71
-        for page_number in range(0, 71):
+        for page_number in range(0, 0
+        ):
             # Format the URL with the current page number
             url = f'https://www.pnp.co.za/c/pnpbase?query=:relevance:allCategories:pnpbase:category:food-cupboard-423144840&currentPage={page_number}'
             

@@ -7,6 +7,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # Function to fetch and display data from the 'products' table
 def view_data():
     # Connecting to our database file 'products.db'
+    # Connecting to our database file 'products.db'
     conn = sqlite3.connect('products.db')
     cursor = conn.cursor()  # We'll use this cursor to run SQL queries
     
@@ -21,7 +22,11 @@ def view_data():
     # If we found some rows, print each one; otherwise, let the user know there's no data
     if rows:
         for row in rows:
-            print(row)
+            try:
+                print(row)
+            except UnicodeEncodeError:
+                print("Unable to print row due to encoding error.")
+                logging.warning(f"Failed to print row: {row}")  # Log the issue
     else:
         print("No data found in the 'products' table.")  # if table is empty
     

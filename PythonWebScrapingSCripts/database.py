@@ -60,16 +60,24 @@ def insert_product(conn, product):
         conn.commit()
     except sqlite3.Error as e:
         print(f"Error: {e}")
-
 def update_or_insert_product(conn, product):
-    """Update the product if it exists and the price has changed, or insert it if it doesn't exist."""
+    """Update the product if it exists and the price or image has changed, or insert it if it doesn't exist."""
     existing_product = get_product_by_name_and_source(conn, product['name'], product['source'])
+    
     if existing_product:
         product_id, existing_price = existing_product
-        if existing_price != product['price']:
+        # Fetch the current image for this product
+        cursor = conn.cursor()
+        cursor.execute('SELECT image FROM products WHERE id = ?', (product_id,))
+        existing_image = cursor.fetchone()[0]
+        
+        # Update the product if the price or image has changed
+        if existing_price != product['price'] or existing_image != product['image']:
             update_product(conn, product_id, product)
     else:
+        # Insert new product if it doesn't exist
         insert_product(conn, product)
+
 
 def close_connection(conn):
     """Close the database connection."""

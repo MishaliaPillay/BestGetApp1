@@ -27,7 +27,7 @@ def main():
         logging.info(f"Woolworths scraper completed: {len(woolworths_products)} products found.")
     except Exception as e:
         logging.error(f"Woolworths scraper failed: {e}")
-    
+
     try:
         logging.info("Running Checkers scraper...")
         checkers_products = checkers()  # Run Checkers scraper
@@ -37,6 +37,7 @@ def main():
     except Exception as e:
         logging.error(f"Checkers scraper failed: {e}")
 
+    """
     try:
         logging.info("Running PnP scraper...")
         pnp_products = pnp()  # Run PnP scraper
@@ -45,7 +46,7 @@ def main():
         logging.info(f"PnP scraper completed: {len(pnp_products)} products found.")
     except Exception as e:
         logging.error(f"PnP scraper failed: {e}")
-    
+    """
     # Step 4: Close the database connection
     close_connection(conn)
 
