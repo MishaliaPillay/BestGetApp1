@@ -100,7 +100,7 @@ def main():
 
     try:
         # Loop through pages
-        for page_number in range(30, 355):
+        for page_number in range(0, 355):
             url = f'https://www.checkers.co.za/c-2413/All-Departments/Food?q=%3Arelevance%3AbrowseAllStoresFacetOff%3AbrowseAllStoresFacetOff&page={page_number}'
 
             logging.info(f"Scraping page {page_number}...")
